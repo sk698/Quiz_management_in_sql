@@ -1,0 +1,1 @@
+UPDATE `quiz_app_db`.`users` SET `role` = 'admin' WHERE (`user_id` = '1');

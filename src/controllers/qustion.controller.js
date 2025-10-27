@@ -125,16 +125,18 @@ const getAllQuestions = asyncHandler(async (req, res) => {
     );
 
     if (!questions.length) {
-        throw new ApiError(404, "No questions found for this quiz");
+        return res.status(200).json(
+            new ApiResponse(200, [], "No questions found for this quiz")
+        );
     }
 
     const questionIds = questions.map(q => q.question_id);
 
     // 3. Get all options for those questions in a single query
-    //    We only select non-sensitive fields (no is_correct)
-    const options = await db.query(
+    
+    const [options] = await db.pool.query(
         "SELECT option_id, question_id, text FROM Options WHERE question_id IN (?)",
-        [questionIds]
+        [ questionIds ] // Your parameter [ [3, 4] ] is correct for pool.query
     );
 
     // 4. Map options to their respective questions in memory
@@ -153,11 +155,11 @@ const getAllQuestions = asyncHandler(async (req, res) => {
     const responseData = questions.map(q => ({
         question_id: q.question_id,
         text: q.text,
-        options: optionsMap.get(q.question_id) || [] // Ensure empty array if no options
+        options: optionsMap.get(q.question_id) || [] 
     }));
 
     res.status(200).json(
-        new ApiResponse(200, questions, "Questions retrieved successfully")
+        new ApiResponse(200, responseData, "Questions retrieved successfully")
     );
 });
 
