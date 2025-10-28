@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ChangePasswordPage from './pages/ChangePasswordPage';
 
 // User (Protected) Pages
 import QuizPage from './pages/QuizPage';
@@ -30,12 +31,14 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="quiz/:quizId" element={<QuizPage />} />
           <Route path="quiz/:quizId/results" element={<ResultsPage />} />
+          <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
         
         {/* Protected Admin Routes */}
         <Route element={<ProtectedRoute adminOnly={true} />}>
           <Route path="admin" element={<AdminDashboard />} />
           <Route path="admin/quiz/:quizId/add" element={<AddQuestionPage />} />
+          <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 
         {/* Catch-all for 404 Not Found */}
