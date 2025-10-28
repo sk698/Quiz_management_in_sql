@@ -240,9 +240,11 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     
     // 1. Get the user from DB
+    // Note: The auth middleware (verifyJWT) uses _id in the token, 
+    // but your DB uses user_id. You should use req.user.user_id here.
     const [user] = await db.query(
         "SELECT * FROM Users WHERE user_id = ? LIMIT 1",
-        [req.user?._id]
+        [req.user?.user_id] // Changed from req.user?._id to req.user?.user_id
     );
 
     // 2. Check old password
@@ -258,7 +260,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     // 4. Update password in DB
     await db.query(
         "UPDATE Users SET password = ? WHERE user_id = ?",
-        [newHashedPassword, req.user?._id]
+        [newHashedPassword, req.user?.user_id] // Changed from req.user?._id
     );
 
     return res

@@ -20,6 +20,7 @@ const Layout = () => {
           {isAuthenticated ? (
             <>
               {isAdmin && <Link to="/admin">Admin Dashboard</Link>}
+              <Link to="/change-password">Change Password</Link>
               <span>Hello, {user.username}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
